@@ -35,3 +35,12 @@ def log_n_time(n=100):
     return wrapper
   return wrap
 
+def benchmark(func, n=100, *args, **kwargs):
+  begin = datetime.datetime.now()
+  for _ in range(n):
+    func(args, kwargs)
+  end = datetime.datetime.now()
+
+  timedelta = end - begin
+  info("func %s processed %d times in %.4f" %(func.__name__, n, float(timedelta.total_seconds())))
+  info("func %s processed one time in %.4f" %(func.__name__, float(timedelta.total_seconds()/n)))
