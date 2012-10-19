@@ -59,7 +59,7 @@ class Segment(object):
     num = self.word.find(words)
     return words[:num], num
 
-  def seg(self, words):
+  def seg_text(self, words):
     word = True
     while word:
       word, num = self.find(words)
