@@ -3,6 +3,9 @@
 
 from __future__ import division, unicode_literals, print_function
 
+# TODO 算法有点小瑕疵，仔细思考下。
+SAFE_END = u'絅'
+
 class WordDict(dict):
   _special = {
     '#': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -36,7 +39,7 @@ class Word(object):
 
   def find(self, words, num=0):
     if num >= len(words):
-      return num
+      return 1
 
     word = words[num]
     if self.words.has_key(word):
@@ -60,6 +63,7 @@ class Segment(object):
     return words[:num], num
 
   def seg_text(self, words):
+    words += SAFE_END
     word = True
     while word:
       word, num = self.find(words)
@@ -73,6 +77,6 @@ def test():
   word4 = u'陈天@'
   seg = Segment()
   seg.add([word1, word2, word3, word4])
-  for i in seg.seg(u'陈天是陈驰远的Uncle陈1214是陈驰远陈天tyr是陈天rry'):
+  for i in seg.seg_text(u'陈驰远是陈天的哥哥陈124陈天yrrr'):
     if len(i) > 1:
       print(i)

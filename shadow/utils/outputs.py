@@ -38,3 +38,6 @@ def json_item(item):
     return item.strftime(DATETIME_FORMAT)
   else:
     return item
+
+def separator_print(title, separator='#'):
+  print(separator*10, title, separator*10)
