@@ -39,5 +39,9 @@ def json_item(item):
   else:
     return item
 
-def separator_print(title, separator='#'):
-  print(separator*10, title, separator*10)
+def separator_print(title, separator='#', encoding=None):
+  content = separator*10 + title + separator*10
+  if encoding:
+    print(content.encode(encoding))
+  else:
+    print(content)

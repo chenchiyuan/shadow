@@ -2,7 +2,7 @@
 # __author__ = chenchiyuan
 
 from __future__ import division, unicode_literals, print_function
-from shadow.utils.encodes import md5_encode
+from shadow.utils.encodes import md5_all, md5_encode
 from shadow.utils.outputs import smart_print
 
 import json
@@ -14,16 +14,15 @@ class FunctionCache(object):
     self.filename = filename or 'tmp/function.json'
 
   def _do_hash(self, func_name, unique_id='', *args, **kwargs):
-    def dumps_smart(item):
-      if not item:
-        return ''
-      else:
-        try:
-          return json.dumps(item)
-        except:
-          return json.dumps(item.__class__.__name__) # TODO
+    if unique_id:
+      return unique_id
+    else:
+      fun_md5 = md5_all(func_name)
+      args_md5 = md5_all(args)
+      kwargs_md5 = md5_all(kwargs)
 
-    hash_seq = [func_name, dumps_smart(args), json.dumps(kwargs), unique_id]
+
+    hash_seq = [fun_md5, args_md5, kwargs_md5]
     return md5_encode(';'.join(hash_seq))
 
   def record(self, func_name, unique_id='', *args, **kwargs):
@@ -56,7 +55,7 @@ class FunctionCache(object):
       instance.caches.update({hash_key: True})
     return instance
 
-def func_cache(instance, unique_id=''):
+def func_cache(instance, show=True, unique_id=''):
   def wrap(func):
     def wrapper(*args, **kwargs):
       if instance.performed(func.__name__, unique_id, *args, **kwargs):
@@ -65,8 +64,9 @@ def func_cache(instance, unique_id=''):
       try:
         res = func(*args, **kwargs)
       except Exception, err:
-        smart_print(args, "Args")
-        smart_print(kwargs, "Kwargs")
+        if show:
+          smart_print(args)
+          smart_print(kwargs)
         raise err
       instance.record(func.__name__, unique_id, *args, **kwargs)
       return res

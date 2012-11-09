@@ -18,3 +18,6 @@ def distinct_list(seq, idfun=None):
     seen[marker] = 1
     result.append(item)
   return result
+
+def filter_none_distinct_list(seq, idfun=None):
+  return filter(None, distinct_list(seq, idfun))
