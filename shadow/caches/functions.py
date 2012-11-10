@@ -21,7 +21,6 @@ class FunctionCache(object):
       args_md5 = md5_all(args)
       kwargs_md5 = md5_all(kwargs)
 
-
     hash_seq = [fun_md5, args_md5, kwargs_md5]
     return md5_encode(';'.join(hash_seq))
 

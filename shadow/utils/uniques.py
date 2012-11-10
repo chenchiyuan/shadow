@@ -50,6 +50,11 @@ def unicode_all(item):
     return ''.join(result)
   elif isinstance(item, datetime):
     return datetime_to_str(item)
+  elif isinstance(item, file):
+    return to_unicode(item.name)
 
-  items = item.__dict__
+  try:
+    items = item.__dict__
+  except:
+    items = dir(item)
   return unicode_all(items)

@@ -3,6 +3,7 @@
 
 from __future__ import division, unicode_literals, print_function
 import hashlib
+from IPython.utils.py3compat import unicode_to_str
 from shadow.utils.uniques import unicode_all
 
 def md5_encode(info):
@@ -12,4 +13,5 @@ def md5_encode(info):
 
 def md5_all(item):
   info = unicode_all(item)
-  return md5_encode(info)
+  info_str = unicode_to_str(info)
+  return md5_encode(info_str)
