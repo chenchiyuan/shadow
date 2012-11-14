@@ -3,9 +3,8 @@
 
 from __future__ import division, unicode_literals, print_function
 from shadow.utils.encodes import md5_all, md5_encode
-from shadow.utils.outputs import smart_print
+from shadow.utils.outputs import smart_print, separator_print
 
-import json
 import os
 
 class FunctionCache(object):
@@ -26,11 +25,21 @@ class FunctionCache(object):
 
   def record(self, func_name, unique_id='', *args, **kwargs):
     key = self._do_hash(func_name, unique_id, *args, **kwargs)
+    try:
+      self._file_recode(key)
+    except Exception:
+      return
     self.caches.update({key: True})
 
   def performed(self, func_name, unique_id='', *args, **kwargs):
     key = self._do_hash(func_name, unique_id, *args, **kwargs)
     return self.caches.has_key(key)
+
+  def _file_recode(self, key):
+    file = open(self.filename, 'a')
+    line = '%s\n' % key
+    file.write(line.encode('utf-8'))
+    file.close()
 
   def to_file(self):
     file = open(self.filename, 'w')
@@ -58,6 +67,7 @@ def func_cache(instance, show=True, unique_id=''):
   def wrap(func):
     def wrapper(*args, **kwargs):
       if instance.performed(func.__name__, unique_id, *args, **kwargs):
+        separator_print(title=u'函数已执行', encoding=u'utf-8')
         return
 
       try:
