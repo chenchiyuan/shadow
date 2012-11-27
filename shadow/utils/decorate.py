@@ -39,10 +39,14 @@ def example():
     def __init__(self, name):
       self.name = name
 
-    @func_section(before_chain=[before_saying, before_saving],
+    def __i_know_you(self):
+      print("I know you guy %s " % self.name)
+
+    @func_section(before_chain=[__i_know_you, before_saying, before_saving],
       after_chain=[after_saving, done])
     def save(self):
       print("Save name %s " % self.name)
+      return self.name
 
   test = FuncTest(name=u'chenchiyuan')
-  test.save()
+  return test.save()
