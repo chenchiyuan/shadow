@@ -9,13 +9,13 @@ from shadow.utils.loggers import info
 def log_time(func):
   def wrapper(*args, **kwargs):
     begin = datetime.datetime.now()
-    func(*args, **kwargs)
+    res = func(*args, **kwargs)
     end = datetime.datetime.now()
 
     timedelta = end - begin
     info("func %s processed in %f" %(func.__name__,
                   float(timedelta.total_seconds())))
-    return func
+    return res
   return wrapper
 
 def log_n_time(n=100):
