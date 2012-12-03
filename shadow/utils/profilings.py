@@ -35,10 +35,11 @@ def log_n_time(n=100):
     return wrapper
   return wrap
 
-def benchmark(func, n=100, *args, **kwargs):
+def benchmark(func, *args, **kwargs):
+  n = kwargs.pop('n', 10)
   begin = datetime.datetime.now()
   for _ in range(n):
-    func(args, kwargs)
+    func(*args, **kwargs)
   end = datetime.datetime.now()
 
   timedelta = end - begin
